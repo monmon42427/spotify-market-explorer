@@ -1,0 +1,16 @@
+# 大型原始資料檔案 —— 絕對不要提交，GitHub 會擋（免費方案單檔限制通常是100MB）
+# 部署只需要 data/tw_chart_data.csv（已篩選、體積小），這兩個原始檔留在本機做離線腳本用即可
+data/TopSpotifySongsin73Countries.csv
+data/Spotify12MSongs.csv
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Streamlit
+.streamlit/secrets.toml
+
+# OS
+.DS_Store
