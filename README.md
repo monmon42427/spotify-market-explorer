@@ -4,7 +4,7 @@
 
 **這不是歌曲一定會成功的預測器，也不是 Spotify 官方工具。**
 
-🔗 **Live demo**：<!-- 部署完成後把 Streamlit Cloud 網址貼在這裡 -->
+🔗 **Live demo**：https://spotify-market-explorer-jameslin0717.streamlit.app/
 
 ## 功能
 
