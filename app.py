@@ -142,7 +142,7 @@ st.sidebar.title("🎧 Taiwan Spotify\nMarket Explorer")
 st.sidebar.caption("非官方作品，僅供探索與分析用途")
 st.sidebar.link_button(
     "📊 專案簡報 / Slides",
-    "https://jameslin823.my.canva.site/spotifyproject",
+    "https://canva.link/wiuppjezzg9g1cx",
     use_container_width=True,
 )
 
@@ -170,7 +170,7 @@ if validation["warnings"]:
 def render_market_overview(hot_stats: pd.DataFrame):
     st.title("Market Overview")
     st.info(
-        "📊 建議搭配 [專案簡報](https://jameslin823.my.canva.site/spotifyproject) 一起看，"
+        "📊 建議搭配 [專案簡報](https://canva.link/wiuppjezzg9g1cx) 一起看，"
         "了解完整專案脈絡、方法與限制。",
         icon="📊",
     )
@@ -577,7 +577,6 @@ def render_candidate_finder(candidate_songs: pd.DataFrame | None):
 # ---------------------------------------------------------------------------
 def render_start_here():
     st.title("👋 歡迎，先花 1 分鐘看這頁")
-    st.caption("如果你是點履歷連結進來的面試官——這頁就是為你寫的。")
 
     st.markdown(
         "這是我把自己做過的一份 Spotify 台灣市場探索性分析，"
@@ -589,7 +588,7 @@ def render_start_here():
     with col1:
         st.link_button(
             "📊 看專案簡報（脈絡與方法）",
-            "https://jameslin823.my.canva.site/spotifyproject",
+            "https://canva.link/wiuppjezzg9g1cx",
             use_container_width=True,
         )
     with col2:
@@ -601,40 +600,27 @@ def render_start_here():
 
     st.divider()
 
-    st.subheader("這個網站在講什麼")
+    st.subheader("這個網站可以做什麼")
     st.markdown(
-        "台灣 Spotify 每日榜單的 530 首去重歌曲，從「哪些歌成功、成功的樣子長怎樣」"
-        "一路做到「能不能用音訊特徵預測成功」。**不是歌曲一定會成功的預測器**，"
-        "是一個讓你自己動手篩選、比較、模擬的探索工具。"
+        "資料來自台灣 Spotify 每日排行榜前50名（2023年10月至2025年6月，共530首去重歌曲），你可以："
+    )
+    st.markdown(
+        "- 🔍 探索哪些歌成功、成功的類型為何，自己調篩選條件即時看變化\n"
+        "- 🎛️ 自己動手輸入音訊特徵，看模型怎麼評分、為什麼這樣評分\n"
+        "- 📅 看音樂偏好隨月份、天氣怎麼變化\n"
+        "- 🎯 把同一個模型套用到 120 萬首外部歌曲上找候選歌曲"
     )
 
-    st.subheader("建議這樣逛（左側側邊欄切換頁面）")
+    st.subheader("建議操作動線（左側側邊欄切換頁面）")
     guide = [
-        ("Market Overview", "先看整體樣貌：530首歌、成功型態分布、可以直接調日期區間跟篩選條件試試看"),
-        ("Pattern Explorer", "K-Means 分出的 4 個音訊風格族群，PCA 散點圖、歌曲明細表可排序搜尋"),
-        ("Audio Feature Simulator", "**最推薦動手玩**：自己拉滑桿輸入音訊特徵，即時看模型怎麼評分、為什麼"),
-        ("Seasonality", "月份季節性趨勢、天氣相關性（沒有天氣資料照樣能用，這是刻意設計的容錯）"),
-        ("Candidate Finder", "把同一個模型套用到120萬首外部歌曲庫——這裡限制最大，頁面上有詳細警語"),
+        ("Market Overview", "先看整體樣貌：530首歌、成功型態分布，試著調日期區間跟篩選條件"),
+        ("Pattern Explorer", "K-Means 分出的 4 個音訊風格族群，PCA 散點圖、可排序搜尋的歌曲明細表"),
+        ("Audio Feature Simulator", "**最推薦動手玩**：自己拉滑桿輸入音訊特徵，即時看模型評分"),
+        ("Seasonality", "月份季節性趨勢、天氣相關性"),
+        ("Candidate Finder", "把模型套用到120萬首外部歌曲庫找候選"),
     ]
-    for name, desc in guide:
-        st.markdown(f"- **{name}**：{desc}")
-
-    st.divider()
-
-    st.subheader("兩個值得多看一眼的地方")
-    st.success(
-        "**誠實揭露模型限制**：Logistic Regression 模型的 AUC 只有 0.563，"
-        "只比隨機猜測好一點點。我選擇把這個數字直接放上網頁跟README，"
-        "而不是包裝成「準確預測」——這在 Audio Feature Simulator 頁面看得到完整說明。",
-        icon="🎯",
-    )
-    st.success(
-        "**實際抓到並修好一個模型bug**：把模型套到120萬首外部歌曲評分時，"
-        "分數一度全部飽和在99.99%（訓練資料範圍太窄，套到差異很大的資料時特徵值"
-        "被推到上百個標準差外）。定位到根因後修正，這個過程記錄在 GitHub repo 的 "
-        "`AI_COLLABORATION_LOG.md` 裡。",
-        icon="🔧",
-    )
+    for i, (name, desc) in enumerate(guide, start=1):
+        st.markdown(f"{i}. **{name}** — {desc}")
 
     st.divider()
     st.caption("準備好了嗎？點左側側邊欄的「Market Overview」開始逛。")
