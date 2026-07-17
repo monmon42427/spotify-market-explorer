@@ -140,10 +140,16 @@ candidate_songs = get_candidate_songs()  # None 如果 artifact 還沒產生，C
 # ---------------------------------------------------------------------------
 st.sidebar.title("🎧 Taiwan Spotify\nMarket Explorer")
 st.sidebar.caption("非官方作品，僅供探索與分析用途")
+st.sidebar.link_button(
+    "📊 專案簡報 / Slides",
+    "https://jameslin823.my.canva.site/spotifyproject",
+    use_container_width=True,
+)
 
 page = st.sidebar.radio(
     "頁面",
     [
+        "👋 Start Here",
         "Market Overview",
         "Pattern Explorer",
         "Audio Feature Simulator",
@@ -163,6 +169,11 @@ if validation["warnings"]:
 # ---------------------------------------------------------------------------
 def render_market_overview(hot_stats: pd.DataFrame):
     st.title("Market Overview")
+    st.info(
+        "📊 建議搭配 [專案簡報](https://jameslin823.my.canva.site/spotifyproject) 一起看，"
+        "了解完整專案脈絡、方法與限制。",
+        icon="📊",
+    )
     st.caption(
         "以「最高排名」與「上榜天數」定義的成功型態，是分析用的定義，"
         "不代表營收或商業成功。詳見 About / Methodology。"
@@ -561,7 +572,77 @@ def render_candidate_finder(candidate_songs: pd.DataFrame | None):
     st.dataframe(display_df.head(200), use_container_width=True, hide_index=True)
 
 
-if page == "Market Overview":
+# ---------------------------------------------------------------------------
+# Start Here — 給第一次進來的人（尤其是面試官）快速導覽
+# ---------------------------------------------------------------------------
+def render_start_here():
+    st.title("👋 歡迎，先花 1 分鐘看這頁")
+    st.caption("如果你是點履歷連結進來的面試官——這頁就是為你寫的。")
+
+    st.markdown(
+        "這是我把自己做過的一份 Spotify 台灣市場探索性分析，"
+        "重構成一個可互動網頁的作品。**分析本身是我做的，"
+        "介面開發、重構、測試由 Claude（Anthropic 的 AI）協作完成。**"
+    )
+
+    col1, col2 = st.columns(2)
+    with col1:
+        st.link_button(
+            "📊 看專案簡報（脈絡與方法）",
+            "https://jameslin823.my.canva.site/spotifyproject",
+            use_container_width=True,
+        )
+    with col2:
+        st.link_button(
+            "💻 看原始碼（GitHub）",
+            "https://github.com/monmon42427/spotify-market-explorer",
+            use_container_width=True,
+        )
+
+    st.divider()
+
+    st.subheader("這個網站在講什麼")
+    st.markdown(
+        "台灣 Spotify 每日榜單的 530 首去重歌曲，從「哪些歌成功、成功的樣子長怎樣」"
+        "一路做到「能不能用音訊特徵預測成功」。**不是歌曲一定會成功的預測器**，"
+        "是一個讓你自己動手篩選、比較、模擬的探索工具。"
+    )
+
+    st.subheader("建議這樣逛（左側側邊欄切換頁面）")
+    guide = [
+        ("Market Overview", "先看整體樣貌：530首歌、成功型態分布、可以直接調日期區間跟篩選條件試試看"),
+        ("Pattern Explorer", "K-Means 分出的 4 個音訊風格族群，PCA 散點圖、歌曲明細表可排序搜尋"),
+        ("Audio Feature Simulator", "**最推薦動手玩**：自己拉滑桿輸入音訊特徵，即時看模型怎麼評分、為什麼"),
+        ("Seasonality", "月份季節性趨勢、天氣相關性（沒有天氣資料照樣能用，這是刻意設計的容錯）"),
+        ("Candidate Finder", "把同一個模型套用到120萬首外部歌曲庫——這裡限制最大，頁面上有詳細警語"),
+    ]
+    for name, desc in guide:
+        st.markdown(f"- **{name}**：{desc}")
+
+    st.divider()
+
+    st.subheader("兩個值得多看一眼的地方")
+    st.success(
+        "**誠實揭露模型限制**：Logistic Regression 模型的 AUC 只有 0.563，"
+        "只比隨機猜測好一點點。我選擇把這個數字直接放上網頁跟README，"
+        "而不是包裝成「準確預測」——這在 Audio Feature Simulator 頁面看得到完整說明。",
+        icon="🎯",
+    )
+    st.success(
+        "**實際抓到並修好一個模型bug**：把模型套到120萬首外部歌曲評分時，"
+        "分數一度全部飽和在99.99%（訓練資料範圍太窄，套到差異很大的資料時特徵值"
+        "被推到上百個標準差外）。定位到根因後修正，這個過程記錄在 GitHub repo 的 "
+        "`AI_COLLABORATION_LOG.md` 裡。",
+        icon="🔧",
+    )
+
+    st.divider()
+    st.caption("準備好了嗎？點左側側邊欄的「Market Overview」開始逛。")
+
+
+if page == "👋 Start Here":
+    render_start_here()
+elif page == "Market Overview":
     render_market_overview(hot_stats)
 elif page == "Pattern Explorer":
     render_pattern_explorer(hot_stats, cluster_bundle)
